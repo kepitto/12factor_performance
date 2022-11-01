@@ -1,7 +1,6 @@
 const { Client } = require("pg");
 const express = require("express");
 const app = express();
-const querystring = require('node:querystring');
 const port = 8080;
 
 const client = new Client({
@@ -14,7 +13,18 @@ const insertData = async (cam, cpu, latency) => {
   try {
       await client.query(
           `INSERT INTO performanceData (cam, cpu, latency)  
-          VALUES ($1, $2, $3)`, [cam, cpu, latency]); // sends queries
+          VALUES ($1, $2, $3)`, [cam, cpu, latency]); 
+      return true;
+  } catch (error) {
+      console.error(error.stack);
+      return false;
+  }
+};
+
+const deleteData = async (id) => {
+  try {
+      await client.query(
+          `DELETE FROM performanceData WHERE id=$1`, [id]); 
       return true;
   } catch (error) {
       console.error(error.stack);
@@ -24,6 +34,11 @@ const insertData = async (cam, cpu, latency) => {
 
 app.get("/addData", async (req, res) => {
   insertData(req.query.cam, req.query.cpu, req.query.latency);
+  res.end();
+});
+
+app.get("/deleteData", async (req, res) => {
+  deleteData(req.query.id);
   res.end();
 });
 
