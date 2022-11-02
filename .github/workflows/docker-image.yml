@@ -21,7 +21,7 @@ jobs:
       run: |
         docker login -u $DOCKER_USER -p $DOCKER_PASSWORD 
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag kepitto/performanceTracker:$(date +%s)
+      run: docker build . --file Dockerfile --tag kepitto/performancetracker:$(date +%s)
       
     - name: Docker Push
-      run: docker push kepitto/performanceTracker
+      run: docker push kepitto/performancetracker
