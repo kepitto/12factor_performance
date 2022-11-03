@@ -14,7 +14,6 @@ const insertData = async (cam, cpu, latency) => {
       await client.query(
           `INSERT INTO performanceData (cam, cpu, latency)  
           VALUES ($1, $2, $3)`, [cam, cpu, latency]);
-      console.log(`new data added: cam=\"${cam}\" cpu=\"${cpu}\" latency=\"${latency}\"`); 
       return true;
   } catch (error) {
       console.log("Data could not be added");
@@ -56,11 +55,13 @@ const createTable = async (id) => {
 
 app.get("/addData", async (req, res) => {
   insertData(req.query.cam, req.query.cpu, req.query.latency);
+  console.log(`new data added: cam=\"${req.query.cam}\" cpu=\"${req.query.cpu}\" latency=\"${req.query.latency}\"`); 
   res.end();
 });
 
 app.get("/deleteData", async (req, res) => {
   deleteData(req.query.id);
+  console.log("deleted data with following id:", req.query.id);
   res.end();
 });
 
