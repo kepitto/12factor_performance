@@ -35,6 +35,25 @@ const deleteData = async (id) => {
   }
 };
 
+const createTable = async (id) => {
+  try {
+      await client.query(
+          `CREATE TABLE IF NOT EXISTS performanceData
+          (
+              id SERIAL,
+              cam text,
+              cpu int,
+              latency int,
+              CONSTRAINT performanceData_pkey PRIMARY KEY (id)
+          );`); 
+      return true;
+  } catch (error) {
+      console.log("Table creation failed");
+      console.error(error.stack);
+      return false;
+  }
+};
+
 app.get("/addData", async (req, res) => {
   insertData(req.query.cam, req.query.cpu, req.query.latency);
   res.end();
@@ -61,6 +80,7 @@ app.get("/performanceData", async (req, res) => {
 
 (async () => {
   await client.connect();
+  createTable();
 
   app.listen(port, () => {
     console.log(`Example app listening at http://localhost:${port}`);
